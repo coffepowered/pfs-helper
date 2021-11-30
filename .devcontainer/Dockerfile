@@ -7,4 +7,5 @@ FROM jupyter/datascience-notebook:ubuntu-20.04
 
 RUN pip install mdutils jupyter_contrib_nbextensions && jupyter contrib nbextension install --user
 RUN pip install jupyter_nbextensions_configurator && jupyter nbextensions_configurator enable --user
-
+RUN python3 -m pip install --upgrade build
+RUN python3 -m pip install --upgrade twine
