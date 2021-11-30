@@ -1,0 +1,12 @@
+// More settings at https://code.visualstudio.com/docs/remote/devcontainerjson-reference
+{
+	"dockerFile": "Dockerfile",
+	"name": "jupyter-ds-docker",
+
+	"extensions": [
+		"ms-python.python",
+		"ms-python.vscode-pylance",
+		"ms-toolsai.jupyter",
+		"eamodio.gitlens"
+	]
+}  
