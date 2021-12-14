@@ -13,6 +13,15 @@ To upload:
 # Developing
 `.devcontainer` folder is provided for convenience.
 
+## Notes on type hints
+* [Typechecking with a Python Library That Has No Type Hints](https://skeptric.com/python-type-stubs/)
+
+> mypy program.py
+
+This command makes mypy type check your program.py file and print out any errors it finds. Mypy will type check your code statically: this means that it will check for errors without ever running your code, just like a linter.
+
+
+
 # TODO
 For better documentation 
 

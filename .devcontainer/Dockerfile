@@ -9,3 +9,4 @@ RUN pip install mdutils jupyter_contrib_nbextensions && jupyter contrib nbextens
 RUN pip install jupyter_nbextensions_configurator && jupyter nbextensions_configurator enable --user
 RUN python3 -m pip install --upgrade build
 RUN python3 -m pip install --upgrade twine
+RUN python3 -m pip install mypy pip install data-science-types

@@ -1,4 +1,7 @@
 from sklearn.base import TransformerMixin
+import pandas as pd
+from sklearn.pipeline import make_pipeline
+from sklearn.base import BaseEstimator, TransformerMixin
 
 class FeatureLagger(TransformerMixin):
     '''
@@ -46,3 +49,20 @@ class FeatureLagger(TransformerMixin):
         assert x_len == X.shape[0], print(f"initial len: {x_len}, final len: {X.shape[0]}")
         
         return X
+class ColumnFilter(BaseEstimator, TransformerMixin):
+    # <3 https://stackoverflow.com/questions/61556766/scikit-learn-transformer-to-select-columns-by-name
+    def __init__(self, remove_cols):
+        if not isinstance(remove_cols, list):
+            self.remove_cols = [remove_cols]
+        else:
+            self.remove_cols = remove_cols
+
+    def fit(self, X: pd.DataFrame, y: pd.Series):
+        # there is nothing to fit
+        self.keep_cols = [f for f in X.columns if f not in self.remove_cols]
+        assert len(self.keep_cols) > 0
+        return self
+
+    def transform(self, X:pd.DataFrame):
+        #X = X.copy()
+        return X[self.keep_cols]
