@@ -2,7 +2,11 @@ from ray import tune
 from sklearn.metrics import mean_squared_error as mse
 from operator import itemgetter
 import lightgbm as lgb
+import logging
 
+#logger = logging.getLogger(__name__)
+
+# TODO: put a logger
 class LightGbmRegressorTrainable(tune.Trainable):
     # Original code from:
     # https://docs.ray.io/en/latest/tune/api_docs/trainable.html#function-api
@@ -15,17 +19,20 @@ class LightGbmRegressorTrainable(tune.Trainable):
         self.total_loss = 0 
         self.average_loss = 0
         self.losses = {"train": [], "cv": []}
+        
         # Hyperparams to tune
         self.lr = config["lr"]
         self.max_depth = config.get("max_depth", None)
         self.n_estimators = config.get("n_estimators", None)
         self.subsample = config.get("subsample", .75)
+        self.min_samples_leaf = int(config.get("min_samples_leaf", 20))
+        self.max_bin = int(config.get("min_samples_leaf", 255))
         
         self.X = data["X"]
         self.y = data["y"]
         self.cv = data["cv"] #list of tuples
         
-    def step(self):  # Called iteratively at each ray step.
+    def step(self):  # This is called iteratively.
         """
            step is invoked multiple times. 
            Each time, the Trainable object executes one logical iteration of training in the tuning process,
@@ -41,7 +48,9 @@ class LightGbmRegressorTrainable(tune.Trainable):
             model = lgb.LGBMRegressor(**{"learning_rate": self.lr,
                                          "max_depth": self.max_depth,
                                          "n_estimators": self.n_estimators,
-                                         "subsample": self.subsample,})
+                                         "subsample": self.subsample,
+                                         "min_samples_leaf": self.min_samples_leaf,
+                                         "max_bin": self.max_bin})
             # fits one fold
             X_train, y_train, X_cv, y_cv = self.X.loc[ti], self.y.loc[ti], self.X.loc[te], self.y.loc[te]
             model.fit(X_train, y_train)
