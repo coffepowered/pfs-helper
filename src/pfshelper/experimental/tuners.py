@@ -25,7 +25,7 @@ class LightGbmRegressorTrainable(tune.Trainable):
         self.max_depth = config.get("max_depth", None)
         self.n_estimators = config.get("n_estimators", None)
         self.subsample = config.get("subsample", .75)
-        self.min_data_in_leaf  = int(config.get("min_data_in_leaf ", 20))
+        self.min_data_in_leaf  = int(config.get("min_data_in_leaf", 20))
         self.max_bin = int(config.get("max_bin", 255))
         
         self.X = data["X"]
