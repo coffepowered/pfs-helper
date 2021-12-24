@@ -25,8 +25,8 @@ class LightGbmRegressorTrainable(tune.Trainable):
         self.max_depth = config.get("max_depth", None)
         self.n_estimators = config.get("n_estimators", None)
         self.subsample = config.get("subsample", .75)
-        self.min_samples_leaf = int(config.get("min_samples_leaf", 20))
-        self.max_bin = int(config.get("min_samples_leaf", 255))
+        self.min_data_in_leaf  = int(config.get("min_data_in_leaf ", 20))
+        self.max_bin = int(config.get("max_bin", 255))
         
         self.X = data["X"]
         self.y = data["y"]
@@ -45,11 +45,12 @@ class LightGbmRegressorTrainable(tune.Trainable):
             ti, te = self.cv[self.x]
             
             # Instantiates a new model at each fold
+            # https://lightgbm.readthedocs.io/en/latest/Parameters.html?highlight=min_child_samples#learning-control-parameters
             model = lgb.LGBMRegressor(**{"learning_rate": self.lr,
                                          "max_depth": self.max_depth,
                                          "n_estimators": self.n_estimators,
                                          "subsample": self.subsample,
-                                         "min_samples_leaf": self.min_samples_leaf,
+                                         "min_data_in_leaf ": self.min_data_in_leaf,
                                          "max_bin": self.max_bin})
             # fits one fold
             X_train, y_train, X_cv, y_cv = self.X.loc[ti], self.y.loc[ti], self.X.loc[te], self.y.loc[te]
